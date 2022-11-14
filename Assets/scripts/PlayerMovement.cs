@@ -5,10 +5,20 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
     private bool pressed = false;
+    private int[,] gameArea = new int[5, 5] { 
+        {0, 0, 1, 1, 0}, 
+        {0, 1, 1, 1, 0}, 
+        {0, 1, 1, 1, 0}, 
+        {0, 0, 1, 0, 0},
+        {0, 0, 1, 0, 0}};
+    
+    private int xIdx = 2;
+    private int yIdx = 2; 
+
     
     // Start is called before the first frame update
     void Start() {
-        
+        gameObject.transform.position = new Vector3(0, 0, 0);
     }
 
     // Update is called once per frame
@@ -20,9 +30,19 @@ public class PlayerMovement : MonoBehaviour {
             if (!pressed) {
                 pressed = true;
                 if (Input.GetAxisRaw("Horizontal") != 0) {
-                    horizontalMovement = 1f * check(Input.GetAxisRaw("Horizontal"));
+                    float direction = check(Input.GetAxisRaw("Horizontal"));
+
+                    if (yIdx + (int)direction >= 0 && yIdx + (int)direction < gameArea.GetLength(0) && gameArea[xIdx, yIdx + (int)direction] == 1) {
+                        horizontalMovement = 1f * direction;
+                        yIdx += (int)direction;
+                    }
                 } else {
-                    verticalMovement = 1f * check(Input.GetAxisRaw("Vertical"));
+                    float direction = check(Input.GetAxisRaw("Vertical"));
+
+                    if (xIdx + (int)direction * -1 >= 0 && xIdx + (int)direction * -1 < gameArea.GetLength(1) && gameArea[xIdx + (int)direction * -1, yIdx] == 1) {
+                        verticalMovement = 1f * direction;
+                        xIdx += (int)direction * -1;
+                    }
                 }
             }
 
