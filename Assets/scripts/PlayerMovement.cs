@@ -5,20 +5,23 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
     private bool pressed = false;
-    private int[,] gameArea = new int[5, 5] { 
-        {0, 0, 1, 1, 0}, 
-        {0, 1, 1, 1, 0}, 
-        {0, 1, 1, 1, 0}, 
-        {0, 0, 1, 0, 0},
-        {0, 0, 1, 0, 0}};
     
-    private int xIdx = 2;
-    private int yIdx = 2; 
+    public int[,] gameArea;
+    
+    public int startX;
+    public int startY;
 
-    
+    public float[] coordPosX;
+    public float[] coordPosY;
+
+
     // Start is called before the first frame update
     void Start() {
-        gameObject.transform.position = new Vector3(0, 0, 0);
+       
+    }
+
+    public void initialize() {
+        gameObject.transform.position = new Vector3(coordPosX[startY], coordPosY[startX], 0);
     }
 
     // Update is called once per frame
@@ -32,16 +35,16 @@ public class PlayerMovement : MonoBehaviour {
                 if (Input.GetAxisRaw("Horizontal") != 0) {
                     float direction = check(Input.GetAxisRaw("Horizontal"));
 
-                    if (yIdx + (int)direction >= 0 && yIdx + (int)direction < gameArea.GetLength(0) && gameArea[xIdx, yIdx + (int)direction] == 1) {
+                    if (startY + (int)direction >= 0 && startY + (int)direction < gameArea.GetLength(0) && gameArea[startX, startY + (int)direction] == 1) {
                         horizontalMovement = 1f * direction;
-                        yIdx += (int)direction;
+                        startY += (int)direction;
                     }
                 } else {
                     float direction = check(Input.GetAxisRaw("Vertical"));
 
-                    if (xIdx + (int)direction * -1 >= 0 && xIdx + (int)direction * -1 < gameArea.GetLength(1) && gameArea[xIdx + (int)direction * -1, yIdx] == 1) {
+                    if (startX + (int)direction * -1 >= 0 && startX + (int)direction * -1 < gameArea.GetLength(1) && gameArea[startX + (int)direction * -1, startY] == 1) {
                         verticalMovement = 1f * direction;
-                        xIdx += (int)direction * -1;
+                        startX += (int)direction * -1;
                     }
                 }
             }
