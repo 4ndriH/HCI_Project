@@ -9,11 +9,11 @@ public class SetUp_Prototype : MonoBehaviour {
     public PlayerMovement pm;
 
     public int[,] gameArea = new int[5, 5] {
-        {0, 0, 1, 1, 0},
+        {1, 0, 0, 0, 0},
+        {0, 1, 1, 69, 0},
+        {1, 1, 1, 1, 0},
         {0, 1, 1, 1, 0},
-        {0, 1, 1, 1, 0},
-        {0, 0, 1, 0, 0},
-        {0, 0, 1, 0, 0}};
+        {0, 0, 0, 0, 0}};
 
     public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
     public float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
@@ -21,16 +21,16 @@ public class SetUp_Prototype : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         pm.gameArea = gameArea;
-        pm.startX = 2;
-        pm.startY = 3;
+        pm.posX = 2;
+        pm.posY = 2;
         pm.coordPosX = coordPosX;
         pm.coordPosY = coordPosY;
-        pm.initialize();
+        pm.Initialize();
 
-        for (int i = 0; i< 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                if (gameArea[i, j] == 1) {
-                    addCircle(coordPosX[j], coordPosY[i]);
+        for (int x = 0; x< 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                if (gameArea[x, y] >= 1) {
+                    AddCircle(coordPosX[y], coordPosY[x]);
                 }
             }
         }
@@ -41,7 +41,7 @@ public class SetUp_Prototype : MonoBehaviour {
         
     }
 
-    private void addCircle(float x, float y) {
+    private void AddCircle(float x, float y) {
         Vector3 circlePos = new Vector3(x, y, 0);
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];
         GameObject gObj = Instantiate(circle, circlePos, Quaternion.identity) as GameObject;

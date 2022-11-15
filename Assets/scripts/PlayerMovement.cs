@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,8 +9,8 @@ public class PlayerMovement : MonoBehaviour {
     
     public int[,] gameArea;
     
-    public int startX;
-    public int startY;
+    public int posX;
+    public int posY;
 
     public float[] coordPosX;
     public float[] coordPosY;
@@ -20,44 +21,42 @@ public class PlayerMovement : MonoBehaviour {
        
     }
 
-    public void initialize() {
-        gameObject.transform.position = new Vector3(coordPosX[startY], coordPosY[startX], 0);
+    public void Initialize() {
+        gameObject.transform.position = new Vector3(coordPosX[posX], coordPosY[posY], 0);
     }
 
     // Update is called once per frame
     void Update() {
         if (Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) {
-            float horizontalMovement = 0f;
-            float verticalMovement = 0f; 
-
             if (!pressed) {
                 pressed = true;
                 if (Input.GetAxisRaw("Horizontal") != 0) {
-                    float direction = check(Input.GetAxisRaw("Horizontal"));
+                    float direction = Check(Input.GetAxisRaw("Horizontal"));
 
-                    if (startY + (int)direction >= 0 && startY + (int)direction < gameArea.GetLength(0) && gameArea[startX, startY + (int)direction] == 1) {
-                        horizontalMovement = 1f * direction;
-                        startY += (int)direction;
+                    if (posY + (int)direction >= 0 && posY + (int)direction < gameArea.GetLength(0) && gameArea[posX, posY + (int)direction] >= 1) {
+                        posY += (int)direction;
                     }
                 } else {
-                    float direction = check(Input.GetAxisRaw("Vertical"));
+                    float direction = Check(Input.GetAxisRaw("Vertical"));
 
-                    if (startX + (int)direction * -1 >= 0 && startX + (int)direction * -1 < gameArea.GetLength(1) && gameArea[startX + (int)direction * -1, startY] == 1) {
-                        verticalMovement = 1f * direction;
-                        startX += (int)direction * -1;
+                    if (posX + (int)direction * -1 >= 0 && posX + (int)direction * -1 < gameArea.GetLength(1) && gameArea[posX + (int)direction * -1, posY] >= 1) {
+                        posX += (int)direction * -1;
                     }
                 }
+                Vector3 movementDirection = new Vector3(coordPosX[posY], coordPosY[posX], 0);
+                Transform t = gameObject.transform;
+                t.position = movementDirection;
             }
-
-            Vector3 movementDirection = new Vector3(horizontalMovement, verticalMovement, 0);
-
-            gameObject.transform.Translate(movementDirection);
+            
+            if (gameArea[posX, posY] == 69) {
+                Debug.Log("you won!");
+            }
         } else {
             pressed = false;
         }
     }
 
-    public static float check(float compare) {
+    private static float Check(float compare) {
         if (compare == 0f)
             return 0f;
               
