@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class SetUp_Prototype : MonoBehaviour {
@@ -7,13 +8,21 @@ public class SetUp_Prototype : MonoBehaviour {
     public GameObject circle;
 
     public PlayerMovement pm;
+    private bool ignore = false;
+
+    // -1 - death fields, dont touch
+    //  0 - not passable
+    //  1 - normal field
+    //  2 - teleporter to the other side (horizontal)
+    //  3 - teleporter to the other side (vertical)
+    // 69 - target
 
     public int[,] gameArea = new int[5, 5] {
-        {1, 0, 0, 0, 0},
+        {1, 0, 0, 3, 0},
         {0, 1, 1, 69, 0},
-        {1, 1, 1, 1, 0},
+        {2, 1, 1, 1, 2},
         {0, 1, 1, 1, 0},
-        {0, 0, 0, 0, 0}};
+        {0, -1, -1, 3, 0}};
 
     public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
     public float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
@@ -29,7 +38,7 @@ public class SetUp_Prototype : MonoBehaviour {
 
         for (int x = 0; x< 5; x++) {
             for (int y = 0; y < 5; y++) {
-                if (gameArea[x, y] >= 1) {
+                if (gameArea[x, y] != 0) {
                     AddCircle(coordPosX[y], coordPosY[x]);
                 }
             }
@@ -38,7 +47,13 @@ public class SetUp_Prototype : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        
+        if (pm.success && !ignore){
+            UnityEngine.Debug.Log("you won!");
+            ignore = true;
+        } else if (pm.failed && !ignore) {
+            UnityEngine.Debug.Log("ah shit you dead noob");
+            ignore = true;
+        }
     }
 
     private void AddCircle(float x, float y) {
