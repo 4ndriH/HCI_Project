@@ -8,6 +8,7 @@ public class SetUp_Prototype : MonoBehaviour {
     public GameObject circle;
 
     public PlayerMovement pm;
+    private Colors c = new Colors();
     private bool ignore = false;
 
     // -1 - death fields, dont touch
@@ -15,7 +16,7 @@ public class SetUp_Prototype : MonoBehaviour {
     //  1 - normal field
     //  2 - teleporter to the other side (horizontal)
     //  3 - teleporter to the other side (vertical)
-    // 69 - target
+    // 69 - goal
 
     public int[,] gameArea = new int[5, 5] {
         {1, 0, 0, 3, 0},
@@ -23,6 +24,13 @@ public class SetUp_Prototype : MonoBehaviour {
         {2, 1, 1, 1, 2},
         {0, 1, 1, 1, 0},
         {0, -1, -1, 3, 0}};
+
+    public int[,] gameAreaColors = new int[5, 5] {
+        {0, 0, 0, 2, 0},
+        {0, 0, 0, 1, 0},
+        {2, 0, 0, 0, 2},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 2, 0}};
 
     public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
     public float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
@@ -39,7 +47,7 @@ public class SetUp_Prototype : MonoBehaviour {
         for (int x = 0; x< 5; x++) {
             for (int y = 0; y < 5; y++) {
                 if (gameArea[x, y] != 0) {
-                    AddCircle(coordPosX[y], coordPosY[x]);
+                    AddCircle(x, y);
                 }
             }
         }
@@ -56,11 +64,14 @@ public class SetUp_Prototype : MonoBehaviour {
         }
     }
 
-    private void AddCircle(float x, float y) {
-        Vector3 circlePos = new Vector3(x, y, 0);
+    private void AddCircle(int x, int y) {
+        Vector3 circlePos = new Vector3(coordPosX[y], coordPosY[x], 0);
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];
         GameObject gObj = Instantiate(circle, circlePos, Quaternion.identity) as GameObject;
         Transform t = gObj.transform;
         t.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        if (gameAreaColors[x, y] != 0) {
+            gObj.GetComponent<SpriteRenderer>().material.color = c.colors[gameAreaColors[x, y]];
+        }
     }
 }
