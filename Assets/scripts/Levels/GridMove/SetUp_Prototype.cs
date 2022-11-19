@@ -12,13 +12,13 @@ public class SetUp_Prototype : MonoBehaviour {
     private Colors c = new Colors();
     private bool ignore = false;
 
+    // use this matrix to define the game area
     // -1 - death fields, dont touch
-    //  0 - not passable
+    //  0 - not passable (no field)
     //  1 - normal field
     //  2 - teleporter to the other side (horizontal)
     //  3 - teleporter to the other side (vertical)
     // 69 - goal
-
     public int[,] gameArea = new int[5, 5] {
         {1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1},
@@ -26,6 +26,8 @@ public class SetUp_Prototype : MonoBehaviour {
         {1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1}};
 
+    // this matrix allows you to color the tiles
+    // numbers correspond to the index of the color in the color colors array in the colors class
     public int[,] gameAreaColors = new int[5, 5] {
         {0, 0, 0, 2, 0},
         {0, 0, 0, 0, 0},
@@ -33,9 +35,12 @@ public class SetUp_Prototype : MonoBehaviour {
         {0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0}};
 
+    // define the center points of the tiles and where the character moves to
     public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
     public float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
 
+    // define path the user has to take
+    // coordinates based on the matrix
     public List<(int x, int y, bool goal)> allowedMoves = new () {
         (2, 2, false),
         (1, 2, false),
@@ -72,6 +77,7 @@ public class SetUp_Prototype : MonoBehaviour {
     }
 
     // Update is called once per frame
+    // checks if the fail/success variables have been set
     void Update() {
         if (pm.success && !ignore){
             UnityEngine.Debug.Log("you won!");
@@ -82,6 +88,7 @@ public class SetUp_Prototype : MonoBehaviour {
         }
     }
 
+    // adds circles, scales them and assignes them a color
     private void AddCircle(int x, int y) {
         Vector3 circlePos = new Vector3(coordPosX[y], coordPosY[x], 0);
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];

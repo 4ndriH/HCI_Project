@@ -27,12 +27,15 @@ public class PlayerMovement : MonoBehaviour {
        
     }
 
+    // set the characters default starting position
     public void Initialize() {
         gameObject.transform.position = new Vector3(coordPosX[posX], coordPosY[posY], 0);
     }
 
     // Update is called once per frame
     void Update() {
+        // honestly ignore this mess. X and Y coordinates are switched so it matches the matrix
+        // coordinates. really confusing. dont worry about it, it works
         if ((Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) && !success && !failed) {
             if (!pressed) {
                 pressed = true;
@@ -63,11 +66,10 @@ public class PlayerMovement : MonoBehaviour {
                 }
                 moveCnt++;
 
-                Vector3 movementDirection = new Vector3(coordPosX[posY], coordPosY[posX], 0);
-                Transform t = gameObject.transform;
-                t.position = movementDirection;
+                gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); ;
             }
 
+            // set fail/success variables based on the grid or the allowed moves
             if (gameArea[posX, posY] == 69 || allowedMoves[moveCnt].goal) {
                 success = true;
             } else if (gameArea[posX, posY] == -1 || allowedMoves[moveCnt].x != posX || allowedMoves[moveCnt].y != posY) {
@@ -78,14 +80,16 @@ public class PlayerMovement : MonoBehaviour {
         }
     }
 
+    // differentiate between left/right and up/down
     private static float Check(float compare) {
-        if (compare == 0f)
+        if (compare == 0f){
             return 0f;
+        }
               
-        else if (compare < 0f)
+        else if (compare < 0f) {
             return -1f;
-              
-        else
+        } else {
             return 1f;
+        }
     }
 }
