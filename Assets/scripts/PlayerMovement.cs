@@ -8,9 +8,13 @@ public class PlayerMovement : MonoBehaviour {
     private bool pressed = false;
     public bool success = false;
     public bool failed = false;
-    
+
+    private int moveCnt = 0;
+
     public int[,] gameArea;
-    
+    public List<Tuple<int, int, bool>> allowedMoves;
+
+
     public int posX;
     public int posY;
 
@@ -57,14 +61,16 @@ public class PlayerMovement : MonoBehaviour {
                         }
                     }
                 }
+                moveCnt++;
+
                 Vector3 movementDirection = new Vector3(coordPosX[posY], coordPosY[posX], 0);
                 Transform t = gameObject.transform;
                 t.position = movementDirection;
             }
 
-            if (gameArea[posX, posY] == 69) {
+            if (gameArea[posX, posY] == 69 || allowedMoves[moveCnt].Item3) {
                 success = true;
-            } else if (gameArea[posX, posY] == -1) {
+            } else if (gameArea[posX, posY] == -1 || allowedMoves[moveCnt].Item1 != posX || allowedMoves[moveCnt].Item2 != posY) {
                 failed = true;
             }
         } else {

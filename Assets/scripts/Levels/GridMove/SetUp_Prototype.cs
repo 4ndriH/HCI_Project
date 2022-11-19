@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,25 +20,42 @@ public class SetUp_Prototype : MonoBehaviour {
     // 69 - goal
 
     public int[,] gameArea = new int[5, 5] {
-        {1, 0, 0, 3, 0},
-        {0, 1, 1, 69, 0},
-        {2, 1, 1, 1, 2},
-        {0, 1, 1, 1, 0},
-        {0, -1, -1, 3, 0}};
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1}};
 
     public int[,] gameAreaColors = new int[5, 5] {
         {0, 0, 0, 2, 0},
-        {0, 0, 0, 1, 0},
-        {2, 0, 0, 0, 2},
         {0, 0, 0, 0, 0},
-        {0, 0, 0, 2, 0}};
+        {2, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0}};
 
     public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
     public float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
 
+    public List<Tuple<int, int, bool>> allowedMoves = new List<Tuple<int, int, bool>> {
+        Tuple.Create(2, 2, false),
+        Tuple.Create(1, 2, false),
+        Tuple.Create(1, 3, false),
+        Tuple.Create(2, 3, false),
+        Tuple.Create(3, 3, false),
+        Tuple.Create(3, 2, false),
+        Tuple.Create(3, 1, false),
+        Tuple.Create(2, 1, false),
+        Tuple.Create(1, 1, false),
+        Tuple.Create(0, 1, false),
+        Tuple.Create(0, 2, false),
+        Tuple.Create(0, 3, false),
+        Tuple.Create(0, 4, true)
+    };
+
     // Start is called before the first frame update
     void Start() {
         pm.gameArea = gameArea;
+        pm.allowedMoves = allowedMoves;
         pm.posX = 2;
         pm.posY = 2;
         pm.coordPosX = coordPosX;
