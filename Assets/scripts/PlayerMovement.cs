@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour {
     private int moveCnt = 0;
 
     public int[,] gameArea;
-    public List<Tuple<int, int, bool>> allowedMoves;
+    public List<(int x, int y, bool goal)> allowedMoves;
 
 
     public int posX;
@@ -68,9 +68,9 @@ public class PlayerMovement : MonoBehaviour {
                 t.position = movementDirection;
             }
 
-            if (gameArea[posX, posY] == 69 || allowedMoves[moveCnt].Item3) {
+            if (gameArea[posX, posY] == 69 || allowedMoves[moveCnt].goal) {
                 success = true;
-            } else if (gameArea[posX, posY] == -1 || allowedMoves[moveCnt].Item1 != posX || allowedMoves[moveCnt].Item2 != posY) {
+            } else if (gameArea[posX, posY] == -1 || allowedMoves[moveCnt].x != posX || allowedMoves[moveCnt].y != posY) {
                 failed = true;
             }
         } else {

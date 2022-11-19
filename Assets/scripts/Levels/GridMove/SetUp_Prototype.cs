@@ -36,20 +36,20 @@ public class SetUp_Prototype : MonoBehaviour {
     public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
     public float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
 
-    public List<Tuple<int, int, bool>> allowedMoves = new List<Tuple<int, int, bool>> {
-        Tuple.Create(2, 2, false),
-        Tuple.Create(1, 2, false),
-        Tuple.Create(1, 3, false),
-        Tuple.Create(2, 3, false),
-        Tuple.Create(3, 3, false),
-        Tuple.Create(3, 2, false),
-        Tuple.Create(3, 1, false),
-        Tuple.Create(2, 1, false),
-        Tuple.Create(1, 1, false),
-        Tuple.Create(0, 1, false),
-        Tuple.Create(0, 2, false),
-        Tuple.Create(0, 3, false),
-        Tuple.Create(0, 4, true)
+    public List<(int x, int y, bool goal)> allowedMoves = new () {
+        (2, 2, false),
+        (1, 2, false),
+        (1, 3, false),
+        (2, 3, false),
+        (3, 3, false),
+        (3, 2, false),
+        (3, 1, false),
+        (2, 1, false),
+        (1, 1, false),
+        (0, 1, false),
+        (0, 2, false),
+        (0, 3, false),
+        (0, 4, true)
     };
 
     // Start is called before the first frame update
