@@ -29,11 +29,11 @@ public class SetUp_Prototype : MonoBehaviour {
     // this matrix allows you to color the tiles
     // numbers correspond to the index of the color in the color colors array in the colors class
     public int[,] gameAreaColors = new int[5, 5] {
-        {0, 0, 0, 2, 0},
-        {0, 0, 0, 0, 0},
-        {2, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0}};
+        {2, 2, 2, 1, 2},
+        {2, 2, 2, 2, 2},
+        {1, 2, 2, 2, 2},
+        {2, 2, 2, 2, 2},
+        {2, 2, 2, 2, 2}};
 
     // define the center points of the tiles and where the character moves to
     public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
@@ -90,7 +90,8 @@ public class SetUp_Prototype : MonoBehaviour {
 
     // adds circles, scales them and assignes them a color
     private void AddCircle(int x, int y) {
-        Vector3 circlePos = new Vector3(coordPosX[y], coordPosY[x], 0);
+        int shiftToRight = 5;
+        Vector3 circlePos = new Vector3(coordPosX[y] + shiftToRight, coordPosY[x], 0);
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];
         GameObject gObj = Instantiate(circle, circlePos, Quaternion.identity) as GameObject;
         Transform t = gObj.transform;

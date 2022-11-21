@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour {
     public float[] coordPosX;
     public float[] coordPosY;
 
+    public int offset = 5;
+
 
     // Start is called before the first frame update
     void Start() {
@@ -28,8 +30,9 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     // set the characters default starting position
+    // add 5 o
     public void Initialize() {
-        gameObject.transform.position = new Vector3(coordPosX[posX], coordPosY[posY], 0);
+        gameObject.transform.position = new Vector3(coordPosX[posX] + offset, coordPosY[posY], 0);
     }
 
     // Update is called once per frame
@@ -66,7 +69,7 @@ public class PlayerMovement : MonoBehaviour {
                 }
                 moveCnt++;
 
-                gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); ;
+                gameObject.transform.position = new Vector3(coordPosX[posY] + offset, coordPosY[posX], 0); ;
             }
 
             // set fail/success variables based on the grid or the allowed moves
