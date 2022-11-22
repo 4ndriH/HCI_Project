@@ -1,16 +1,18 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class SetUp_Prototype : MonoBehaviour {
+    public Button confirmButton;
+    public Button undoBUtton;
     public List<Sprite> objectList = new List<Sprite>();
     public GameObject circle;
 
     public PlayerMovement pm;
     private Colors c = new Colors();
     private bool ignore = false;
+    private bool instantFeedback = true;
 
     // use this matrix to define the game area
     // -1 - death fields, dont touch
@@ -61,10 +63,12 @@ public class SetUp_Prototype : MonoBehaviour {
     void Start() {
         pm.gameArea = gameArea;
         pm.allowedMoves = allowedMoves;
-        pm.posX = 2;
-        pm.posY = 2;
+        pm.posX = allowedMoves[0].x;
+        pm.posY = allowedMoves[0].y;
         pm.coordPosX = coordPosX;
         pm.coordPosY = coordPosY;
+        pm.instantFeedback = instantFeedback;
+        pm.moveTracker.Add((pm.posX, pm.posY));
         pm.Initialize();
 
         for (int x = 0; x< 5; x++) {
@@ -74,6 +78,14 @@ public class SetUp_Prototype : MonoBehaviour {
                 }
             }
         }
+
+        if (!instantFeedback) {
+            confirmButton.onClick.AddListener(() => buttonClickSubmit());
+            undoBUtton.onClick.AddListener(() => buttonClickUndo());
+        } else {
+            Destroy(confirmButton.gameObject);
+            Destroy(undoBUtton.gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -82,7 +94,7 @@ public class SetUp_Prototype : MonoBehaviour {
         if (pm.success && !ignore){
             UnityEngine.Debug.Log("you won!");
             ignore = true;
-        } else if (pm.failed && !ignore) {
+        } else if (pm.failed && !ignore || (!instantFeedback && pm.moveCnt >= 15)) {
             UnityEngine.Debug.Log("ah shit you dead noob");
             ignore = true;
         }
@@ -97,6 +109,29 @@ public class SetUp_Prototype : MonoBehaviour {
         t.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         if (gameAreaColors[x, y] != 0) {
             gObj.GetComponent<SpriteRenderer>().material.color = c.colors[gameAreaColors[x, y]];
+        }
+    }
+
+    private void buttonClickSubmit() {
+        if (pm.moveTracker.Count != allowedMoves.Count) {
+            pm.failed = true;
+            return;
+        }
+
+        for (int i = 0; i < pm.moveTracker.Count; i++) {
+            if (allowedMoves[i].x != pm.moveTracker[i].x || allowedMoves[i].y != pm.moveTracker[i].y) {
+                pm.failed= true;
+                return;
+            }
+        }
+
+        pm.success = true;
+    }
+
+    private void buttonClickUndo() {
+        if (pm.moveCnt > 0) {
+            pm.moveTracker.RemoveAt(pm.moveCnt--);
+            pm.resetPlayerPosition();
         }
     }
 }
