@@ -68,8 +68,13 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
                 }
-                moveCnt++;
-                moveTracker.Add((posX, posY));
+
+                (int x, int y) prevMove = moveTracker[moveCnt];
+
+                if (prevMove.x != posX || prevMove.y != posY) {
+                    moveCnt++;
+                    moveTracker.Add((posX, posY));
+                }
 
                 gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); ;
             }
