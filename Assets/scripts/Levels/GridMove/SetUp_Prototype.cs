@@ -39,7 +39,7 @@ public class SetUp_Prototype : MonoBehaviour
         {0, 0, 0, 0, 0}};
 
     // define the center points of the tiles and where the character moves to
-    public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
+    public float[] coordPosX = new float[5] { -8f, -7f, -6f, -5f, -4f };
     public float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
 
     // define path the user has to take
