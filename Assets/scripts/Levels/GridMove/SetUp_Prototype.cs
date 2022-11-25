@@ -39,8 +39,8 @@ public class SetUp_Prototype : MonoBehaviour
         {0, 0, 0, 0, 0}};
 
     // define the center points of the tiles and where the character moves to
-    public float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
-    public float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
+    private float[] coordPosX = new float[5] { -3f, -2.5f, 0f, 2.5f, 5f };
+    private float[] coordPosY = new float[5] { 3f, 2.5f, 0f, -2.5f, -5f };
 
     // define path the user has to take
     // coordinates based on the matrix
@@ -61,8 +61,7 @@ public class SetUp_Prototype : MonoBehaviour
     };
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         pm.gameArea = gameArea;
         pm.allowedMoves = allowedMoves;
         pm.posX = allowedMoves[0].x;
@@ -73,24 +72,18 @@ public class SetUp_Prototype : MonoBehaviour
         pm.moveTracker.Add((pm.posX, pm.posY));
         pm.Initialize();
 
-        for (int x = 0; x < 5; x++)
-        {
-            for (int y = 0; y < 5; y++)
-            {
-                if (gameArea[x, y] != 0)
-                {
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                if (gameArea[x, y] != 0) {
                     AddCircle(x, y);
                 }
             }
         }
 
-        if (!instantFeedback)
-        {
+        if (!instantFeedback) {
             confirmButton.onClick.AddListener(() => buttonClickSubmit());
             undoBUtton.onClick.AddListener(() => buttonClickUndo());
-        }
-        else
-        {
+        } else {
             Destroy(confirmButton.gameObject);
             Destroy(undoBUtton.gameObject);
         }
@@ -98,46 +91,38 @@ public class SetUp_Prototype : MonoBehaviour
 
     // Update is called once per frame
     // checks if the fail/success variables have been set
-    void Update()
-    {
-        if (pm.success && !ignore)
-        {
+    void Update() {
+        if (pm.success && !ignore) {
             UnityEngine.Debug.Log("you won!");
             ignore = true;
-        }
-        else if (pm.failed && !ignore || (!instantFeedback && pm.moveCnt >= 15))
-        {
+        } else if (pm.failed && !ignore || (!instantFeedback && pm.moveCnt >= 15)) {
             UnityEngine.Debug.Log("ah shit you dead noob");
             ignore = true;
         }
     }
 
     // adds circles, scales them and assignes them a color
-    private void AddCircle(int x, int y)
-    {
+    private void AddCircle(int x, int y) {
         Vector3 circlePos = new Vector3(coordPosX[y], coordPosY[x], 0);
+        Debug.Log(circlePos);
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];
         GameObject gObj = Instantiate(circle, circlePos, Quaternion.identity) as GameObject;
         Transform t = gObj.transform;
         t.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        if (gameAreaColors[x, y] != 0)
-        {
+        
+        if (gameAreaColors[x, y] != 0) {
             gObj.GetComponent<SpriteRenderer>().material.color = c.colors[gameAreaColors[x, y]];
         }
     }
 
-    private void buttonClickSubmit()
-    {
-        if (pm.moveTracker.Count != allowedMoves.Count)
-        {
+    private void buttonClickSubmit() {
+        if (pm.moveTracker.Count != allowedMoves.Count) {
             pm.failed = true;
             return;
         }
 
-        for (int i = 0; i < pm.moveTracker.Count; i++)
-        {
-            if (allowedMoves[i].x != pm.moveTracker[i].x || allowedMoves[i].y != pm.moveTracker[i].y)
-            {
+        for (int i = 0; i < pm.moveTracker.Count; i++) {
+            if (allowedMoves[i].x != pm.moveTracker[i].x || allowedMoves[i].y != pm.moveTracker[i].y) {
                 pm.failed = true;
                 return;
             }
@@ -146,10 +131,8 @@ public class SetUp_Prototype : MonoBehaviour
         pm.success = true;
     }
 
-    private void buttonClickUndo()
-    {
-        if (pm.moveCnt > 0)
-        {
+    private void buttonClickUndo() {
+        if (pm.moveCnt > 0) {
             pm.moveTracker.RemoveAt(pm.moveCnt--);
             pm.resetPlayerPosition();
         }
