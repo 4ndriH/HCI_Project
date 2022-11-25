@@ -39,8 +39,8 @@ public class SetUp_Prototype : MonoBehaviour
         {0, 0, 0, 0, 0}};
 
     // define the center points of the tiles and where the character moves to
-    private float[] coordPosX = new float[5] { -3f, -2.5f, 0f, 2.5f, 5f };
-    private float[] coordPosY = new float[5] { 3f, 2.5f, 0f, -2.5f, -5f };
+    private float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
+    private float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
 
     // define path the user has to take
     // coordinates based on the matrix
@@ -107,7 +107,7 @@ public class SetUp_Prototype : MonoBehaviour
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];
         GameObject gObj = Instantiate(circle, circlePos, Quaternion.identity) as GameObject;
         Transform t = gObj.transform;
-        t.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        t.localScale = new Vector3(0.3f, 0.3f, 0.3f);
         
         if (gameAreaColors[x, y] != 0) {
             gObj.GetComponent<SpriteRenderer>().material.color = c.colors[gameAreaColors[x, y]];
