@@ -95,8 +95,9 @@ public class SetUp_Prototype : MonoBehaviour
         if (pm.success && !ignore) {
             UnityEngine.Debug.Log("you won!");
             ignore = true;
-        } else if (pm.failed && !ignore || (!instantFeedback && pm.moveCnt >= 15)) {
+        } else if (!ignore && (pm.failed || (!instantFeedback && pm.moveCnt >= 15))) {
             UnityEngine.Debug.Log("ah shit you dead noob");
+            pm.failed = true;
             ignore = true;
         }
     }
