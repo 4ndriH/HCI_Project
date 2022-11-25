@@ -71,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
                 moveCnt++;
                 moveTracker.Add((posX, posY));
 
-                gameObject.transform.position = new Vector3(coordPosX[posY] + offset, coordPosY[posX], 0); ;
+                gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); ;
             }
 
             // set fail/success variables based on the grid or the allowed moves
