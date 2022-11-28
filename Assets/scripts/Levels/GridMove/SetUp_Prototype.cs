@@ -32,15 +32,15 @@ public class SetUp_Prototype : MonoBehaviour
     // this matrix allows you to color the tiles
     // numbers correspond to the index of the color in the color colors array in the colors class
     public int[,] gameAreaColors = new int[5, 5] {
-        {0, 0, 0, 2, 0},
         {0, 0, 0, 0, 0},
-        {2, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0}};
 
     // define the center points of the tiles and where the character moves to
-    private float[] coordPosX = new float[5] { -2f, -1f, 0f, 1f, 2f };
-    private float[] coordPosY = new float[5] { 2f, 1f, 0f, -1f, -2f };
+    private float[] coordPosX = new float[5] { -0.5f, 1.25f, 3f, 4.75f, 6.5f };
+    private float[] coordPosY = new float[5] { 3.5f, 1.75f, 0f, -1.75f, -3.5f };
 
     // define path the user has to take
     // coordinates based on the matrix
@@ -108,11 +108,11 @@ public class SetUp_Prototype : MonoBehaviour
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];
         GameObject gObj = Instantiate(circle, circlePos, Quaternion.identity) as GameObject;
         Transform t = gObj.transform;
-        t.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        t.localScale = new Vector3(0.55f, 0.55f, 0.55f);
         
-        if (gameAreaColors[x, y] != 0) {
+        //if (gameAreaColors[x, y] != 0) {
             gObj.GetComponent<SpriteRenderer>().material.color = c.colors[gameAreaColors[x, y]];
-        }
+        //}
     }
 
     private void buttonClickSubmit() {
