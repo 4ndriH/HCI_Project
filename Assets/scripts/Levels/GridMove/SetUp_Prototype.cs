@@ -9,6 +9,8 @@ public class SetUp_Prototype : MonoBehaviour
     public Button undoBUtton;
     public List<Sprite> objectList = new List<Sprite>();
     public GameObject circle;
+    public int level;
+    public GameObject levelText;
 
     public PlayerMovement pm;
     private Colors c = new Colors();
@@ -87,6 +89,9 @@ public class SetUp_Prototype : MonoBehaviour
             Destroy(confirmButton.gameObject);
             Destroy(undoBUtton.gameObject);
         }
+    
+    //Set level
+    levelText.GetComponent<TMPro.TextMeshProUGUI>().text = "Level " + level.ToString();
     }
 
     // Update is called once per frame
