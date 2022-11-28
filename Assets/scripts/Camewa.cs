@@ -1,7 +1,10 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
-public class CamewaShake : MonoBehaviour {
+public class Camewa : MonoBehaviour {
+    private static bool toggleBlure = false;
     public static IEnumerator Shake(float duration, float magnitude) {
         Vector3 orignalPosition = new Vector3(0f, 0f, -10);
         float elapsed = 0f;
@@ -19,5 +22,8 @@ public class CamewaShake : MonoBehaviour {
         Camera.main.transform.position = orignalPosition;
     }
 
-
+    public static void Blure() {
+        toggleBlure = !toggleBlure;
+        Camera.main.GetComponent<UniversalAdditionalCameraData>().renderPostProcessing = toggleBlure;
+    }
 }

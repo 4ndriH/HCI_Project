@@ -477,7 +477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cf382ac29a6f104a9f81eab1a6e7f71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  start: 0
 --- !u!1 &686048542
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,7 +747,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.33637306, y: 1}
-  m_AnchoredPosition: {x: 15, y: -0.5}
+  m_AnchoredPosition: {x: 14.999817, y: -0.5}
   m_SizeDelta: {x: -31.341797, y: -17.328186}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1040943685
@@ -841,6 +840,55 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1214761323
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1214761325}
+  - component: {fileID: 1214761324}
+  m_Layer: 0
+  m_Name: Blur
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1214761324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214761323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 58eae54924f5c834fb5823bfee9b7199, type: 2}
+--- !u!4 &1214761325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214761323}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.033324763, y: 0.057676867, z: -15.928661}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1472264611
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1601,7 +1649,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.87043315}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.1659851, y: 39}
+  m_AnchoredPosition: {x: 0.1659851, y: 38.999985}
   m_SizeDelta: {x: -475.84, y: -89.609985}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2133772568

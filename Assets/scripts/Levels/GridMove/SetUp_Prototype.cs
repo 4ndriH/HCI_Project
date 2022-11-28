@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class SetUp_Prototype : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class SetUp_Prototype : MonoBehaviour
     public PlayerMovement pm;
     private Colors c = new Colors();
     private bool ignore = false;
-    private bool instantFeedback = true;
+    private bool instantFeedback = false;
 
     // use this matrix to define the game area
     // -1 - death fields, dont touch
@@ -98,10 +99,12 @@ public class SetUp_Prototype : MonoBehaviour
     // checks if the fail/success variables have been set
     void Update() {
         if (pm.success && !ignore) {
-            UnityEngine.Debug.Log("you won!");
+            //Debug.Log("you won!");
+            Camewa.Blure();
             ignore = true;
         } else if (!ignore && (pm.failed || (!instantFeedback && pm.moveCnt >= 15))) {
-            UnityEngine.Debug.Log("ah shit you dead noob");
+            Camewa.Blure();
+            //Debug.Log("ah shit you dead noob");
             pm.failed = true;
             ignore = true;
         }

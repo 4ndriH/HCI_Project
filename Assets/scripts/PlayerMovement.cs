@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
                         posX = prevMove.x;
                         posY = prevMove.y;
 
-                        StartCoroutine(CamewaShake.Shake(0.3f, 0.4f));
+                        StartCoroutine(Camewa.Shake(0.3f, 0.4f));
                     }
                 } else {
 
