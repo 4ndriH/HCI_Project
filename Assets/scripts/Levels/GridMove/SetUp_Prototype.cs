@@ -146,4 +146,13 @@ public class SetUp_Prototype : MonoBehaviour
             pm.resetPlayerPosition();
         }
     }
+
+    //Refresh the level
+    public void refresh(){
+        //Reset player position
+        pm.resetPlayerPosition();
+
+        //reset action list
+        //somewhere in pm movetracker
+    }
 }
