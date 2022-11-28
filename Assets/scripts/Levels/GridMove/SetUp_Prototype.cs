@@ -13,7 +13,7 @@ public class SetUp_Prototype : MonoBehaviour
     public PlayerMovement pm;
     private Colors c = new Colors();
     private bool ignore = false;
-    private bool instantFeedback = false;
+    private bool instantFeedback = true;
 
     // use this matrix to define the game area
     // -1 - death fields, dont touch

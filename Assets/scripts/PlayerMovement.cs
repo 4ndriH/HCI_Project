@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 
@@ -36,8 +38,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         // honestly ignore this mess. X and Y coordinates are switched so it matches the matrix
         // coordinates. really confusing. dont worry about it, it works
         if ((Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) && !success && !failed) {
@@ -68,15 +69,29 @@ public class PlayerMovement : MonoBehaviour
                         }
                     }
                 }
-
                 (int x, int y) prevMove = moveTracker[moveCnt];
+                (int x, int y, bool) nextMove = allowedMoves[moveCnt + 1];
 
-                if (prevMove.x != posX || prevMove.y != posY) {
-                    moveCnt++;
-                    moveTracker.Add((posX, posY));
+                if (instantFeedback) {
+                    if (posX == nextMove.x && posY == nextMove.y) {
+                        moveCnt++;
+                        moveTracker.Add((posX, posY));
+                    } else {
+                        posX = prevMove.x;
+                        posY = prevMove.y;
+
+                        StartCoroutine(CamewaShake.Shake(0.3f, 0.4f));
+                    }
+                } else {
+
+                    if (prevMove.x != posX || prevMove.y != posY) {
+                        moveCnt++;
+                        moveTracker.Add((posX, posY));
+                    }
+
                 }
-
-                gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); ;
+                
+                gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); 
             }
 
             // set fail/success variables based on the grid or the allowed moves
@@ -93,19 +108,12 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // differentiate between left/right and up/down
-    private static float Check(float compare)
-    {
-        if (compare == 0f)
-        {
+    private static float Check(float compare) {
+        if (compare == 0f){
             return 0f;
-        }
-
-        else if (compare < 0f)
-        {
+        } else if (compare < 0f) {
             return -1f;
-        }
-        else
-        {
+        } else {
             return 1f;
         }
     }
