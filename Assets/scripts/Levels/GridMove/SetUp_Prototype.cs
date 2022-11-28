@@ -142,17 +142,13 @@ public class SetUp_Prototype : MonoBehaviour
 
     private void buttonClickUndo() {
         if (pm.moveCnt > 0) {
-            pm.moveTracker.RemoveAt(pm.moveCnt--);
-            pm.resetPlayerPosition();
+            pm.UndoLastMove();
         }
     }
 
-    //Refresh the level
+    // Restart the level
     public void refresh(){
-        //Reset player position
-        pm.resetPlayerPosition();
-
-        //reset action list
-        //somewhere in pm movetracker
+        pm.RestartLevel();
+        ignore = false;
     }
 }

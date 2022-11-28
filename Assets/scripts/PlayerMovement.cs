@@ -26,14 +26,10 @@ public class PlayerMovement : MonoBehaviour
     public List<(int x, int y)> moveTracker = new();
 
     // Start is called before the first frame update
-    void Start()
-    {
-
-    }
+    void Start() {}
 
     // set the characters default starting position
-    public void Initialize()
-    {
+    public void Initialize() {
         gameObject.transform.position = new Vector3(coordPosX[posX], coordPosY[posY], 0);
     }
 
@@ -118,11 +114,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void resetPlayerPosition()
-    {
+    public void UndoLastMove() {
+        moveTracker.RemoveAt(moveCnt--);
         posX = moveTracker[moveCnt].x;
         posY = moveTracker[moveCnt].y;
 
-        gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); ;
+        gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0);
+    }
+
+    public void RestartLevel() {
+        moveCnt = 0;
+        (int x, int y) startingPos = moveTracker[0];
+        failed = success = false;
+        moveTracker = new(){startingPos};
+
+        gameObject.transform.position = new Vector3(coordPosX[startingPos.y], coordPosY[startingPos.x], 0);
     }
 }
