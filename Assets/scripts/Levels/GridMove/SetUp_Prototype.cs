@@ -11,7 +11,7 @@ public class SetUp_Prototype : MonoBehaviour
     public GameObject circle;
     public int level;
     public GameObject levelText;
-
+    public Image TaskDescription;
     public PlayerMovement pm;
     private Colors c = new Colors();
     private bool ignore = false;
@@ -92,6 +92,7 @@ public class SetUp_Prototype : MonoBehaviour
     
     //Set level
     levelText.GetComponent<TMPro.TextMeshProUGUI>().text = "Level " + level.ToString();
+    TaskDescription.sprite = Resources.Load<Sprite>("Sprites/Level"+level.ToString());
     }
 
     // Update is called once per frame
