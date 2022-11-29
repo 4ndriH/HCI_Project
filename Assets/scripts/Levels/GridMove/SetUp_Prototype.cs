@@ -65,6 +65,8 @@ public class SetUp_Prototype : MonoBehaviour
 
     // Start is called before the first frame update
     void Start() {
+        Debug.Log(instantFeedback);
+
         pm.gameArea = gameArea;
         pm.allowedMoves = allowedMoves;
         pm.posX = allowedMoves[0].x;
