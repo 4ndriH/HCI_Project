@@ -25,21 +25,11 @@ public class SetUp_Prototype : MonoBehaviour
     //  2 - teleporter to the other side (horizontal)
     //  3 - teleporter to the other side (vertical)
     // 69 - goal
-    public int[,] gameArea = new int[5, 5] {
-        {1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1},
-        {1, 1, 1, 1, 1}};
+    public int[,] gameArea;
 
     // this matrix allows you to color the tiles
     // numbers correspond to the index of the color in the color colors array in the colors class
-    public int[,] gameAreaColors = new int[5, 5] {
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0}};
+    public int[,] gameAreaColors;
 
     // define the center points of the tiles and where the character moves to
     private float[] coordPosX = new float[5] { -0.5f, 1.25f, 3f, 4.75f, 6.5f };
@@ -47,55 +37,11 @@ public class SetUp_Prototype : MonoBehaviour
 
     // define path the user has to take
     // coordinates based on the matrix
-    public List<(int x, int y, bool goal)> allowedMoves = new() {
-        (2, 2, false),
-        (1, 2, false),
-        (1, 3, false),
-        (2, 3, false),
-        (3, 3, false),
-        (3, 2, false),
-        (3, 1, false),
-        (2, 1, false),
-        (1, 1, false),
-        (0, 1, false),
-        (0, 2, false),
-        (0, 3, false),
-        (0, 4, true)
-    };
+    public List<(int x, int y, bool goal)> allowedMoves;
 
     // Start is called before the first frame update
     void Start() {
-        Debug.Log(instantFeedback);
-
-        pm.gameArea = gameArea;
-        pm.allowedMoves = allowedMoves;
-        pm.posX = allowedMoves[0].x;
-        pm.posY = allowedMoves[0].y;
-        pm.coordPosX = coordPosX;
-        pm.coordPosY = coordPosY;
-        pm.instantFeedback = instantFeedback;
-        pm.moveTracker.Add((pm.posX, pm.posY));
-        pm.Initialize();
-
-        for (int x = 0; x < 5; x++) {
-            for (int y = 0; y < 5; y++) {
-                if (gameArea[x, y] != 0) {
-                    AddCircle(x, y);
-                }
-            }
-        }
-
-        if (!instantFeedback) {
-            confirmButton.onClick.AddListener(() => buttonClickSubmit());
-            undoBUtton.onClick.AddListener(() => buttonClickUndo());
-        } else {
-            Destroy(confirmButton.gameObject);
-            Destroy(undoBUtton.gameObject);
-        }
-    
-    //Set level
-    levelText.GetComponent<TMPro.TextMeshProUGUI>().text = "Level " + level.ToString();
-    TaskDescription.sprite = Resources.Load<Sprite>("Sprites/Level"+level.ToString());
+        LevelLoader();
     }
 
     // Update is called once per frame
@@ -152,5 +98,42 @@ public class SetUp_Prototype : MonoBehaviour
     public void refresh(){
         pm.RestartLevel();
         ignore = false;
+    }
+
+    public void LevelLoader() {
+        gameArea = Config.getGameArea();
+        gameAreaColors = Config.getGameAreaColors();
+        allowedMoves = Config.getAllowedMoves();
+
+        pm.InitializeSpaceship();
+
+        string s = "";
+
+        foreach (int arr in gameArea) {
+            
+                s += arr + " ";
+            
+        }
+
+        Debug.Log(s);
+
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < 5; y++) {
+                if (gameArea[x, y] != 0) {
+                    AddCircle(x, y);
+                }
+            }
+        }
+
+        if (!instantFeedback) {
+            confirmButton.onClick.AddListener(() => buttonClickSubmit());
+            undoBUtton.onClick.AddListener(() => buttonClickUndo());
+        } else {
+            Destroy(confirmButton.gameObject);
+            Destroy(undoBUtton.gameObject);
+        }
+
+        levelText.GetComponent<TMPro.TextMeshProUGUI>().text = "Level " + level.ToString();
+        TaskDescription.sprite = Resources.Load<Sprite>("Sprites/Level" + level.ToString());
     }
 }

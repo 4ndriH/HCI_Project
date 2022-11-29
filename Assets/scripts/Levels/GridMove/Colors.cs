@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Colors {
     public Color[] colors = new Color[] {
-        new Color(0.604f, 0.604f, 0.71f, 0.8f), // transparent
-        new Color(0.5f, 0.2f, 0.8f), // purpe
-        //new Color(0f, 1f, 1f), // cyan
-        new Color(0.67f, 0.94f, 0.99f)
+        new Color(0.604f, 0.604f, 0.71f, 0.8f), // default
+        new Color(0.98f, 0.902f, 0.322f, 0.8f), // yellow
+        new Color(0.447f, 0.878f, 0.376f, 0.8f), // green
+        new Color(0.91f, 0.376f, 0.337f, 0.8f) // red
     };
 }

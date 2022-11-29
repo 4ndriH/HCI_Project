@@ -20,8 +20,8 @@ public class PlayerMovement : MonoBehaviour
     public int posX;
     public int posY;
 
-    public float[] coordPosX;
-    public float[] coordPosY;
+    private float[] coordPosX = new float[5] { -0.5f, 1.25f, 3f, 4.75f, 6.5f };
+    private float[] coordPosY = new float[5] { 3.5f, 1.75f, 0f, -1.75f, -3.5f };
 
     public List<(int x, int y)> moveTracker = new();
 
@@ -29,8 +29,19 @@ public class PlayerMovement : MonoBehaviour
     void Start() {}
 
     // set the characters default starting position
-    public void Initialize() {
+    public void InitializeSpaceship() {
+        gameArea = Config.getGameArea();
+        allowedMoves = Config.getAllowedMoves();
+        instantFeedback = Config.getInstantFeedback();
+        success = false;
+        failed = false;
+
+        (int x, int y, bool b) startingPos = allowedMoves[0];
+        posX = startingPos.x;
+        posY = startingPos.y;
+
         gameObject.transform.position = new Vector3(coordPosX[posX], coordPosY[posY], 0);
+        moveTracker.Add((startingPos.x, startingPos.y));
     }
 
     // Update is called once per frame
