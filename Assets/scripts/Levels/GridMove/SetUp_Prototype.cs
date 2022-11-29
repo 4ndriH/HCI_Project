@@ -10,7 +10,7 @@ public class SetUp_Prototype : MonoBehaviour
     public Button undoBUtton;
     public List<Sprite> objectList = new List<Sprite>();
     public GameObject circle;
-    public int level;
+    private int level;
     public GameObject levelText;
     public Image TaskDescription;
     public PlayerMovement pm;
@@ -48,12 +48,12 @@ public class SetUp_Prototype : MonoBehaviour
     // checks if the fail/success variables have been set
     void Update() {
         if (pm.success && !ignore) {
-            //Debug.Log("you won!");
+            Debug.Log("you won!");
             Camewa.Blure();
             ignore = true;
         } else if (!ignore && (pm.failed || (!instantFeedback && pm.moveCnt >= 15))) {
             Camewa.Blure();
-            //Debug.Log("ah shit you dead noob");
+            Debug.Log("ah shit you dead noob");
             pm.failed = true;
             ignore = true;
         }
@@ -89,18 +89,21 @@ public class SetUp_Prototype : MonoBehaviour
     }
 
     private void buttonClickUndo() {
+            Debug.Log("help");
         if (pm.moveCnt > 0) {
             pm.UndoLastMove();
         }
     }
 
     // Restart the level
-    public void refresh(){
-        pm.RestartLevel();
-        ignore = false;
-    }
+    // public void refresh(){
+    //    Debug.Log("refrest")
+    //pm.RestartLevel();
+    //ignore = false;
+    //}
 
     public void LevelLoader() {
+        level = Config.getLevelNr();
         gameArea = Config.getGameArea();
         gameAreaColors = Config.getGameAreaColors();
         allowedMoves = Config.getAllowedMoves();
@@ -115,7 +118,7 @@ public class SetUp_Prototype : MonoBehaviour
             
         }
 
-        Debug.Log(s);
+        //Debug.Log(s);
 
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {

@@ -40,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
         posX = startingPos.x;
         posY = startingPos.y;
 
-        gameObject.transform.position = new Vector3(coordPosX[posX], coordPosY[posY], 0);
+        gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0);
         moveTracker.Add((startingPos.x, startingPos.y));
     }
 
@@ -77,9 +77,10 @@ public class PlayerMovement : MonoBehaviour
                     }
                 }
                 (int x, int y) prevMove = moveTracker[moveCnt];
-                (int x, int y, bool) nextMove = allowedMoves[moveCnt + 1];
+                
 
                 if (instantFeedback) {
+                    (int x, int y, bool) nextMove = allowedMoves[moveCnt + 1];
                     if (posX == nextMove.x && posY == nextMove.y) {
                         moveCnt++;
                         moveTracker.Add((posX, posY));
@@ -95,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
                         moveCnt++;
                         moveTracker.Add((posX, posY));
                     }
-
+                    Debug.Log("regular " + moveCnt);
                 }
                 
                 gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); 
@@ -126,6 +127,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void UndoLastMove() {
+        Debug.Log("reset" + moveCnt);
         moveTracker.RemoveAt(moveCnt--);
         posX = moveTracker[moveCnt].x;
         posY = moveTracker[moveCnt].y;
