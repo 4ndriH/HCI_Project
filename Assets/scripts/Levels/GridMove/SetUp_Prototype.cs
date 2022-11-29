@@ -17,6 +17,10 @@ public class SetUp_Prototype : MonoBehaviour
     private Colors c = new Colors();
     private bool ignore = false;
     private bool instantFeedback = Config.getInstantFeedback();
+    public GameObject nextButton;
+    public GameObject winText;
+    public GameObject retryButton;
+    public GameObject lossText;
 
     // use this matrix to define the game area
     // -1 - death fields, dont touch
@@ -50,10 +54,14 @@ public class SetUp_Prototype : MonoBehaviour
         if (pm.success && !ignore) {
             Debug.Log("you won!");
             Camewa.Blure();
+            nextButton.SetActive(true);
+            winText.SetActive(true);
             ignore = true;
         } else if (!ignore && (pm.failed || (!instantFeedback && pm.moveCnt >= 15))) {
             Camewa.Blure();
             Debug.Log("ah shit you dead noob");
+            retryButton.SetActive(true);
+            lossText.SetActive(true);
             pm.failed = true;
             ignore = true;
         }
@@ -103,6 +111,11 @@ public class SetUp_Prototype : MonoBehaviour
     //}
 
     public void LevelLoader() {
+        nextButton.SetActive(false);
+        winText.SetActive(false);
+        retryButton.SetActive(false);
+        lossText.SetActive(false);
+
         level = Config.getLevelNr();
         gameArea = Config.getGameArea();
         gameAreaColors = Config.getGameAreaColors();
@@ -138,5 +151,12 @@ public class SetUp_Prototype : MonoBehaviour
 
         levelText.GetComponent<TMPro.TextMeshProUGUI>().text = "Level " + level.ToString();
         TaskDescription.sprite = Resources.Load<Sprite>("Sprites/Level" + level.ToString());
+    }
+    public void nextLevel(){
+        Config.incrementLevelNr();
+        LevelLoader();
+    }
+    public void retryLevel(){
+        LevelLoader();
     }
 }
