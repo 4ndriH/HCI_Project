@@ -30,8 +30,18 @@ public static class GatherData
         Debug.Log("" + Config.getName() + ": Completing " + title + " took " + elapsedTime + " and the subject failed " + failures + " time(s) ("+instant+")");
 
         stringList.Add("" + title + " " + elapsedTime + " " + failures + " " + instant + " " + Config.getName());
+    }
+
+    public static void writeLogToFile() {
+        String[] strArr = File.ReadAllLines("data.txt");
+        int idx = 0;
+
+        foreach (String str in strArr) {
+            stringList.Insert(idx++, str);
+        }
 
         File.WriteAllLines("data.txt", stringList);
+        stringList.Clear();
     }
 
     public static void endTest(){

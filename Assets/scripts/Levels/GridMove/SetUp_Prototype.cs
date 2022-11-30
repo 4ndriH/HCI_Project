@@ -105,6 +105,7 @@ public class SetUp_Prototype : MonoBehaviour
 
     private void buttonClickUndo() {
         if (pm.moveCnt > 0) {
+            // comment
             pm.UndoLastMove();
         }
     }
@@ -138,11 +139,11 @@ public class SetUp_Prototype : MonoBehaviour
         }
 
         if (!instantFeedback) {
-            moveCounter.SetActive(true);
+            //moveCounter.SetActive(true);
             confirmButton.onClick.AddListener(() => buttonClickSubmit());
             undoBUtton.onClick.AddListener(() => buttonClickUndo());
         } else if (instantFeedback && Config.getLevelNr() == 1) {
-            moveCounter.SetActive(false);
+            //moveCounter.SetActive(false);
             Destroy(confirmButton.gameObject);
             Destroy(undoBUtton.gameObject);
         }
@@ -158,6 +159,7 @@ public class SetUp_Prototype : MonoBehaviour
         Config.incrementLevelNr();
         
         if (Config.getWasFinalLevel()) {
+            GatherData.writeLogToFile();
             SceneManager.LoadScene("MainMenu");
         } else {
             LevelLoader();
