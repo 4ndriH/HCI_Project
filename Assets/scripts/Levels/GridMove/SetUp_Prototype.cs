@@ -61,8 +61,8 @@ public class SetUp_Prototype : MonoBehaviour
             winText.SetActive(true);
             ignore = true;
         } else if (!ignore && (pm.failed || (!instantFeedback && pm.moveCnt >= 15))) {
-            //Camewa.Blur(true);
-            Debug.Log("ah shit you dead noob");
+            //Debug.Log("ah shit you dead noob");
+            Camewa.Blur(true);
             retryButton.SetActive(true);
             lossText.SetActive(true);
             pm.failed = true;
