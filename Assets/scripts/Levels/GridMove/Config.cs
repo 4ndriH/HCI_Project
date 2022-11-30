@@ -6,6 +6,8 @@ public static class Config {
     private static bool InstantFeedback = false;
     private static int levelNr = 1;
 
+    private static string name = "Anon";
+
     private static readonly List<List<(int x, int y, bool goal)>> Levels = new() {
         new() {
             (2, 3, false),
@@ -97,6 +99,14 @@ public static class Config {
 
     public static int getLevelNr() {
         return levelNr;
+    }
+
+    public static void setName(string a){
+        name = a;
+    }
+
+    public static string getName() {
+        return name;
     }
 
     public static void incrementLevelNr(){

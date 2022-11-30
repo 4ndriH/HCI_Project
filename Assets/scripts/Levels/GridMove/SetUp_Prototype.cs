@@ -23,6 +23,7 @@ public class SetUp_Prototype : MonoBehaviour
     public GameObject winText;
     public GameObject retryButton;
     public GameObject lossText;
+    public GameObject moveCounter;
 
     private List<GameObject> circleList = new List<GameObject>();
 
@@ -57,6 +58,7 @@ public class SetUp_Prototype : MonoBehaviour
     // Update is called once per frame
     // checks if the fail/success variables have been set
     void Update() {
+        moveCounter.GetComponent<TMPro.TextMeshProUGUI>().text = "Moves left: " + (15 - pm.moveCnt).ToString();
         if (pm.success && !ignore) {
             //Debug.Log("you won!");
             Camewa.Blur(true);
@@ -136,9 +138,11 @@ public class SetUp_Prototype : MonoBehaviour
         }
 
         if (!instantFeedback) {
+            moveCounter.SetActive(true);
             confirmButton.onClick.AddListener(() => buttonClickSubmit());
             undoBUtton.onClick.AddListener(() => buttonClickUndo());
         } else if (instantFeedback && Config.getLevelNr() == 1) {
+            moveCounter.SetActive(false);
             Destroy(confirmButton.gameObject);
             Destroy(undoBUtton.gameObject);
         }
