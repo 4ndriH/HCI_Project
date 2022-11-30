@@ -6,9 +6,9 @@ using System;
 using Debug = UnityEngine.Debug;
 
 
-public class GatherData : MonoBehaviour
+public class GatherData
 {   
-    int failures = 0;
+    int failures;
     Stopwatch sw = new Stopwatch();
     public void startLevel(){
         failures = 0;
