@@ -29,7 +29,8 @@ public static class Config {
             (2, 3, false),
             (2, 4, false),
             (2, 0, false),
-            (2, 1, true)}
+            (2, 1, false),
+            (1, 1, true)}
     };
 
     private static readonly List<int[,]> colors = new() {
