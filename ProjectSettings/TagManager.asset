@@ -51,3 +51,6 @@ TagManager:
   - name: Entity
     uniqueID: 2587115731
     locked: 0
+  - name: Text
+    uniqueID: 1095764885
+    locked: 0
