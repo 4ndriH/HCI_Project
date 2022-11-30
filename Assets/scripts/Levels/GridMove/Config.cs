@@ -113,4 +113,8 @@ public static class Config {
     public static int[,] getGameArea() {
         return gameArea[levelNr - 1];
     }
+
+    public static bool getWasFinalLevel() {
+        return Levels.Count + 1 == levelNr;
+    }
 }

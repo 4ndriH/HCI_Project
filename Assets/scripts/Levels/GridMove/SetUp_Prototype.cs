@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
 using static UnityEngine.UIElements.UxmlAttributeDescription;
@@ -21,6 +22,8 @@ public class SetUp_Prototype : MonoBehaviour
     public GameObject winText;
     public GameObject retryButton;
     public GameObject lossText;
+
+    private List<GameObject> circleList = new List<GameObject>();
 
     // use this matrix to define the game area
     // -1 - death fields, dont touch
@@ -52,13 +55,13 @@ public class SetUp_Prototype : MonoBehaviour
     // checks if the fail/success variables have been set
     void Update() {
         if (pm.success && !ignore) {
-            Debug.Log("you won!");
-            Camewa.Blure();
+            //Debug.Log("you won!");
+            Camewa.Blur(true);
             nextButton.SetActive(true);
             winText.SetActive(true);
             ignore = true;
         } else if (!ignore && (pm.failed || (!instantFeedback && pm.moveCnt >= 15))) {
-            Camewa.Blure();
+            //Camewa.Blur(true);
             Debug.Log("ah shit you dead noob");
             retryButton.SetActive(true);
             lossText.SetActive(true);
@@ -72,12 +75,11 @@ public class SetUp_Prototype : MonoBehaviour
         Vector3 circlePos = new Vector3(coordPosX[y], coordPosY[x], 0);
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];
         GameObject gObj = Instantiate(circle, circlePos, Quaternion.identity) as GameObject;
+        circleList.Add(gObj);
         Transform t = gObj.transform;
         t.localScale = new Vector3(0.55f, 0.55f, 0.55f);
         
-        //if (gameAreaColors[x, y] != 0) {
-            gObj.GetComponent<SpriteRenderer>().material.color = c.colors[gameAreaColors[x, y]];
-        //}
+        gObj.GetComponent<SpriteRenderer>().material.color = c.colors[gameAreaColors[x, y]];
     }
 
     private void buttonClickSubmit() {
@@ -97,20 +99,18 @@ public class SetUp_Prototype : MonoBehaviour
     }
 
     private void buttonClickUndo() {
-            Debug.Log("help");
         if (pm.moveCnt > 0) {
             pm.UndoLastMove();
         }
     }
 
-    // Restart the level
-    // public void refresh(){
-    //    Debug.Log("refrest")
-    //pm.RestartLevel();
-    //ignore = false;
-    //}
-
     public void LevelLoader() {
+        foreach (GameObject g in circleList) {
+            Destroy(g);
+        }
+
+        circleList.Clear();
+
         nextButton.SetActive(false);
         winText.SetActive(false);
         retryButton.SetActive(false);
@@ -120,18 +120,9 @@ public class SetUp_Prototype : MonoBehaviour
         gameArea = Config.getGameArea();
         gameAreaColors = Config.getGameAreaColors();
         allowedMoves = Config.getAllowedMoves();
+        ignore = false;
 
         pm.InitializeSpaceship();
-
-        string s = "";
-
-        foreach (int arr in gameArea) {
-            
-                s += arr + " ";
-            
-        }
-
-        //Debug.Log(s);
 
         for (int x = 0; x < 5; x++) {
             for (int y = 0; y < 5; y++) {
@@ -144,17 +135,24 @@ public class SetUp_Prototype : MonoBehaviour
         if (!instantFeedback) {
             confirmButton.onClick.AddListener(() => buttonClickSubmit());
             undoBUtton.onClick.AddListener(() => buttonClickUndo());
-        } else {
+        } else if (instantFeedback && Config.getLevelNr() == 1) {
             Destroy(confirmButton.gameObject);
             Destroy(undoBUtton.gameObject);
         }
+
+        Camewa.Blur(false);
 
         levelText.GetComponent<TMPro.TextMeshProUGUI>().text = "Level " + level.ToString();
         TaskDescription.sprite = Resources.Load<Sprite>("Sprites/Level" + level.ToString());
     }
     public void nextLevel(){
         Config.incrementLevelNr();
-        LevelLoader();
+        
+        if (Config.getWasFinalLevel()) {
+            SceneManager.LoadScene("MainMenu");
+        } else {
+            LevelLoader();
+        }
     }
     public void retryLevel(){
         LevelLoader();

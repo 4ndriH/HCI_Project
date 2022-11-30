@@ -33,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
         gameArea = Config.getGameArea();
         allowedMoves = Config.getAllowedMoves();
         instantFeedback = Config.getInstantFeedback();
+        moveTracker.Clear();
+        moveCnt = 0;
         success = false;
         failed = false;
 
@@ -96,7 +98,6 @@ public class PlayerMovement : MonoBehaviour
                         moveCnt++;
                         moveTracker.Add((posX, posY));
                     }
-                    Debug.Log("regular " + moveCnt);
                 }
                 
                 gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); 
@@ -127,7 +128,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void UndoLastMove() {
-        Debug.Log("reset" + moveCnt);
         moveTracker.RemoveAt(moveCnt--);
         posX = moveTracker[moveCnt].x;
         posY = moveTracker[moveCnt].y;
