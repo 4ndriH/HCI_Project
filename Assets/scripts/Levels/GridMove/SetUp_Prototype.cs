@@ -18,7 +18,7 @@ public class SetUp_Prototype : MonoBehaviour
     private Colors c = new Colors();
     private bool ignore = false;
     private bool instantFeedback = Config.getInstantFeedback();
-    private GatherData gd = new GatherData();
+    //private GatherData gd = new GatherData();
     public GameObject nextButton;
     public GameObject winText;
     public GameObject retryButton;
@@ -50,7 +50,8 @@ public class SetUp_Prototype : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         LevelLoader();
-        gd.startLevel();
+        
+        GatherData.startLevel();
     }
 
     // Update is called once per frame
@@ -149,7 +150,7 @@ public class SetUp_Prototype : MonoBehaviour
 
     }
     public void nextLevel(){
-        gd.stopLevel("Level " + level.ToString());
+        GatherData.stopLevel("Level " + level.ToString());
         Config.incrementLevelNr();
         
         if (Config.getWasFinalLevel()) {
@@ -157,10 +158,10 @@ public class SetUp_Prototype : MonoBehaviour
         } else {
             LevelLoader();
         }
-        gd.startLevel();
+        GatherData.startLevel();
     }
     public void retryLevel(){
-        gd.addFailure();
+        GatherData.addFailure();
         LevelLoader();
     }
 }

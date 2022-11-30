@@ -7,10 +7,12 @@ public class MainMenuBehaviour : MonoBehaviour
 {
     public void LoadInstant(){
         Config.setInstantFeedback(true);
+        Config.resetLevelNr();
         SceneManager.LoadScene("LevelPrototype");
     }
      public void LoadAfter(){
         Config.setInstantFeedback(false);
+        Config.resetLevelNr();
         SceneManager.LoadScene("LevelPrototype");
     }
 }

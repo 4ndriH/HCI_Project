@@ -91,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
                         posY = prevMove.y;
 
                         StartCoroutine(Camewa.Shake(0.3f, 0.4f));
+                        GatherData.addFailure();
                     }
                 } else {
 

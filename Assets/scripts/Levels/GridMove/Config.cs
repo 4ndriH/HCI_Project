@@ -102,6 +102,9 @@ public static class Config {
     public static void incrementLevelNr(){
         levelNr++;
     }
+    public static void resetLevelNr(){
+        levelNr = 1;
+    }
 
     public static List<(int x, int y, bool goal)> getAllowedMoves() {
         return Levels[levelNr - 1];
