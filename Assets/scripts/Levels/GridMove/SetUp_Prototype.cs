@@ -7,6 +7,7 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class SetUp_Prototype : MonoBehaviour
 {
+    public Button quitButton;
     public Button confirmButton;
     public Button undoBUtton;
     public List<Sprite> objectList = new List<Sprite>();
@@ -51,7 +52,8 @@ public class SetUp_Prototype : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         LevelLoader();
-        
+        quitButton.onClick.AddListener(() => quit());
+
         GatherData.startLevel();
     }
 
@@ -88,6 +90,8 @@ public class SetUp_Prototype : MonoBehaviour
     }
 
     private void buttonClickSubmit() {
+        GatherData.addSubmit();
+        
         if (pm.moveTracker.Count != allowedMoves.Count) {
             pm.failed = true;
             return;
@@ -104,6 +108,7 @@ public class SetUp_Prototype : MonoBehaviour
     }
 
     private void buttonClickUndo() {
+        GatherData.addUndo();
         if (pm.moveCnt > 0) {
             // comment
             pm.UndoLastMove();
@@ -111,9 +116,11 @@ public class SetUp_Prototype : MonoBehaviour
     }
 
     public void LevelLoader() {
+
         foreach (GameObject g in circleList) {
             Destroy(g);
         }
+        
 
         circleList.Clear();
 
@@ -137,6 +144,7 @@ public class SetUp_Prototype : MonoBehaviour
                 }
             }
         }
+        quitButton.onClick.AddListener(() => quit());
 
         if (!instantFeedback) {
             //moveCounter.SetActive(true);
@@ -160,6 +168,7 @@ public class SetUp_Prototype : MonoBehaviour
         
         if (Config.getWasFinalLevel()) {
             GatherData.writeLogToFile();
+            
             SceneManager.LoadScene("MainMenu");
         } else {
             LevelLoader();
@@ -169,5 +178,13 @@ public class SetUp_Prototype : MonoBehaviour
     public void retryLevel(){
         GatherData.addFailure();
         LevelLoader();
+    }
+
+    public void quit(){
+        GatherData.stopLevel("Level " + level.ToString());
+        Config.incrementLevelNr();
+         GatherData.writeLogToFile();
+            
+        SceneManager.LoadScene("MainMenu");
     }
 }

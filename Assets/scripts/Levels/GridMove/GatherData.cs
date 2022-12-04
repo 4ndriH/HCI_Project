@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 
 public static class GatherData
 {   
+    static int submit;
+    static int undo;
     static int failures;
     static List<string> stringList = new List<string>();
     static Stopwatch sw = new Stopwatch();
@@ -25,11 +27,16 @@ public static class GatherData
         }
         else{
             instant = "CAP";
+
         }
         string elapsedTime = String.Format("{0:00}:{1:00}.{2:00}", ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
         Debug.Log("" + Config.getName() + ": Completing " + title + " took " + elapsedTime + " and the subject failed " + failures + " time(s) ("+instant+")");
-
-        stringList.Add("" + title + " " + elapsedTime + " " + failures + " " + instant + " " + Config.getName());
+        if(Config.getInstantFeedback()){
+            stringList.Add("" + title + " " + elapsedTime + " " + failures + " " + instant + " " + Config.getName());
+        }else{
+            stringList.Add("" + title + " " + elapsedTime + " " + submit + " " + undo + " " + instant + " " + Config.getName());
+        }
+        
     }
 
     public static void writeLogToFile() {
@@ -59,5 +66,12 @@ public static class GatherData
 
     public static void addFailure(){
         failures += 1;
+    }
+
+    public static void addSubmit(){
+        submit += 1;
+    }
+    public static void addUndo(){
+        undo +=1;
     }
 }
