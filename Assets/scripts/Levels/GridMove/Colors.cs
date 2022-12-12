@@ -9,6 +9,7 @@ public class Colors {
         new Color(0.447f, 0.878f, 0.376f, 0.8f), // green
         new Color(0.91f, 0.376f, 0.337f, 0.8f), // red
         new Color(0.216f, 0.278f, 0.98f, 0.8f), // blue
-        new Color(0.773f, 0.255f, 0.8f, 0.8f) // pink
+        new Color(0.773f, 0.255f, 0.8f, 0.8f), // pink
+        new Color(0.98f, 0.98f, 0.98f, 0.8f) // white
     };
 }

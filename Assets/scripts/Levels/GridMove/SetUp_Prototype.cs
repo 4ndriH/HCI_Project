@@ -74,6 +74,8 @@ public class SetUp_Prototype : MonoBehaviour
             lossText.SetActive(true);
             pm.failed = true;
             ignore = true;
+        } else if (pm.instantFeedbackRestart) {
+            LevelLoader();
         }
     }
 
@@ -116,11 +118,9 @@ public class SetUp_Prototype : MonoBehaviour
     }
 
     public void LevelLoader() {
-
         foreach (GameObject g in circleList) {
             Destroy(g);
         }
-        
 
         circleList.Clear();
 
@@ -150,7 +150,7 @@ public class SetUp_Prototype : MonoBehaviour
             //moveCounter.SetActive(true);
             confirmButton.onClick.AddListener(() => buttonClickSubmit());
             undoBUtton.onClick.AddListener(() => buttonClickUndo());
-        } else if (instantFeedback && Config.getLevelNr() == 1) {
+        } else if (instantFeedback && Config.getLevelNr() == 1 && !pm.instantFeedbackRestart) {
             //moveCounter.SetActive(false);
             Destroy(confirmButton.gameObject);
             Destroy(undoBUtton.gameObject);
@@ -183,7 +183,7 @@ public class SetUp_Prototype : MonoBehaviour
     public void quit(){
         GatherData.stopLevel("Level " + level.ToString());
         Config.incrementLevelNr();
-         GatherData.writeLogToFile();
+        GatherData.writeLogToFile();
             
         SceneManager.LoadScene("MainMenu");
     }

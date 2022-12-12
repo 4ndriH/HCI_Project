@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public bool success = false;
     public bool failed = false;
     public bool instantFeedback = false;
+    public bool instantFeedbackRestart = false;
 
     public int moveCnt = 0;
 
@@ -37,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
         moveCnt = 0;
         success = false;
         failed = false;
+        instantFeedbackRestart = false;
 
         (int x, int y, bool b) startingPos = allowedMoves[0];
         posX = startingPos.x;
@@ -83,6 +85,7 @@ public class PlayerMovement : MonoBehaviour
 
                 if (instantFeedback) {
                     (int x, int y, bool) nextMove = allowedMoves[moveCnt + 1];
+                    Debug.Log("nextMove " + nextMove.x + " " + nextMove.y + " || " + posX + " " + posY + " moveCnt " + moveCnt);
                     if (posX == nextMove.x && posY == nextMove.y) {
                         moveCnt++;
                         moveTracker.Add((posX, posY));
@@ -91,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
                         posY = prevMove.y;
 
                         StartCoroutine(Camewa.Shake(0.3f, 0.4f));
+                        instantFeedbackRestart = true;
                         GatherData.addFailure();
                     }
                 } else {
@@ -139,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
     public void RestartLevel() {
         moveCnt = 0;
         (int x, int y) startingPos = moveTracker[0];
-        failed = success = false;
+        failed = success = instantFeedbackRestart = false;
         moveTracker = new(){startingPos};
 
         gameObject.transform.position = new Vector3(coordPosX[startingPos.y], coordPosY[startingPos.x], 0);
