@@ -77,6 +77,10 @@ public class SetUp_Prototype : MonoBehaviour
         } else if (pm.instantFeedbackRestart) {
             LevelLoader();
         }
+
+        if (Input.GetKeyDown(KeyCode.Return) && nextButton.activeSelf == true) {
+            nextLevel();
+        }
     }
 
     // adds circles, scales them and assignes them a color
@@ -162,6 +166,7 @@ public class SetUp_Prototype : MonoBehaviour
         TaskDescription.sprite = Resources.Load<Sprite>("Sprites/Level" + level.ToString());
 
     }
+
     public void nextLevel(){
         GatherData.stopLevel("Level " + level.ToString());
         Config.incrementLevelNr();
@@ -175,6 +180,7 @@ public class SetUp_Prototype : MonoBehaviour
         }
         GatherData.startLevel();
     }
+
     public void retryLevel(){
         GatherData.addFailure();
         LevelLoader();
