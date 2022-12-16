@@ -78,8 +78,12 @@ public class SetUp_Prototype : MonoBehaviour
             LevelLoader();
         }
 
-        if (Input.GetKeyDown(KeyCode.Return) && nextButton.activeSelf == true) {
-            nextLevel();
+        if (Input.GetKeyDown(KeyCode.Return)) {
+            if (nextButton.activeSelf == true) {
+                nextLevel();
+            } else if (retryButton.activeSelf == true) {
+                retryLevel();
+            }
         }
     }
 
