@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour
     public int[,] gameArea;
     public List<(int x, int y, bool goal)> allowedMoves;
 
-
     public int posX;
     public int posY;
 
@@ -26,11 +25,9 @@ public class PlayerMovement : MonoBehaviour
 
     public List<(int x, int y)> moveTracker = new();
 
-    // Start is called before the first frame update
-    void Start() {}
-
-    // set the characters default starting position
-    public void InitializeSpaceship() {
+    // Lodas the level data from the config file and initializes the space ship
+    public void InitializeSpaceship()
+    {
         gameArea = Config.getGameArea();
         allowedMoves = Config.getAllowedMoves();
         instantFeedback = Config.getInstantFeedback();
@@ -48,48 +45,71 @@ public class PlayerMovement : MonoBehaviour
         moveTracker.Add((startingPos.x, startingPos.y));
     }
 
-    // Update is called once per frame
-    void Update() {
+    // Controls the spaceship movement and handles the move verification based on the two variants
+    void Update()
+    {
         // honestly ignore this mess. X and Y coordinates are switched so it matches the matrix
         // coordinates. really confusing. dont worry about it, it works
-        if ((Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) && !success && !failed) {
-            if (!pressed) {
+        if ((Input.GetAxisRaw("Horizontal") != 0 || Input.GetAxisRaw("Vertical") != 0) && !success && !failed)
+        {
+            if (!pressed)
+            {
                 pressed = true;
-                if (Input.GetAxisRaw("Horizontal") != 0) {
+                if (Input.GetAxisRaw("Horizontal") != 0)
+                {
                     float direction = Check(Input.GetAxisRaw("Horizontal"));
 
-                    if (posY + (int)direction >= 0 && posY + (int)direction < gameArea.GetLength(0) && gameArea[posX, posY + (int)direction] != 0) {
+                    if (posY + (int)direction >= 0 && posY + (int)direction < gameArea.GetLength(0) && gameArea[posX, posY + (int)direction] != 0)
+                    {
                         posY += (int)direction;
-                    } else if (gameArea[posX, posY] == 2) {
-                        if (posY == 0) {
+                    }
+                    else if (gameArea[posX, posY] == 2)
+                    {
+                        if (posY == 0)
+                        {
                             posY = gameArea.GetLength(0) - 1;
-                        } else {
+                        }
+                        else
+                        {
                             posY = 0;
                         }
                     }
-                } else {
+                }
+                else
+                {
                     float direction = Check(Input.GetAxisRaw("Vertical"));
 
-                    if (posX + (int)direction * -1 >= 0 && posX + (int)direction * -1 < gameArea.GetLength(1) && gameArea[posX + (int)direction * -1, posY] != 0) {
+                    if (posX + (int)direction * -1 >= 0 && posX + (int)direction * -1 < gameArea.GetLength(1) && gameArea[posX + (int)direction * -1, posY] != 0)
+                    {
                         posX += (int)direction * -1;
-                    } else if (gameArea[posX, posY] == 3) {
-                        if (posX == 0) {
+                    }
+                    else if (gameArea[posX, posY] == 3)
+                    {
+                        if (posX == 0)
+                        {
                             posX = gameArea.GetLength(0) - 1;
-                        } else {
+                        }
+                        else
+                        {
                             posX = 0;
                         }
                     }
                 }
-                (int x, int y) prevMove = moveTracker[moveCnt];
-                
 
-                if (instantFeedback) {
+                (int x, int y) prevMove = moveTracker[moveCnt];
+
+
+                if (instantFeedback)
+                {
                     (int x, int y, bool) nextMove = allowedMoves[moveCnt + 1];
-                    Debug.Log("nextMove " + nextMove.x + " " + nextMove.y + " || " + posX + " " + posY + " moveCnt " + moveCnt);
-                    if (posX == nextMove.x && posY == nextMove.y) {
+
+                    if (posX == nextMove.x && posY == nextMove.y)
+                    {
                         moveCnt++;
                         moveTracker.Add((posX, posY));
-                    } else {
+                    }
+                    else
+                    {
                         posX = prevMove.x;
                         posY = prevMove.y;
 
@@ -97,55 +117,62 @@ public class PlayerMovement : MonoBehaviour
                         instantFeedbackRestart = true;
                         GatherData.addFailure();
                     }
-                } else {
-
-                    if (prevMove.x != posX || prevMove.y != posY) {
+                }
+                else
+                {
+                    if (prevMove.x != posX || prevMove.y != posY)
+                    {
                         moveCnt++;
                         moveTracker.Add((posX, posY));
                     }
                 }
-                
-                gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0); 
+
+                gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0);
             }
 
             // set fail/success variables based on the grid or the allowed moves
-            if (instantFeedback) {
-                if (gameArea[posX, posY] == 69 || allowedMoves[moveCnt].goal){
+            if (instantFeedback)
+            {
+                if (gameArea[posX, posY] == 69 || allowedMoves[moveCnt].goal)
+                {
                     success = true;
-                } else if (gameArea[posX, posY] == -1 || allowedMoves[moveCnt].x != posX || allowedMoves[moveCnt].y != posY) {
+                }
+                else if (gameArea[posX, posY] == -1 || allowedMoves[moveCnt].x != posX || allowedMoves[moveCnt].y != posY)
+                {
                     failed = true;
                 }
             }
-        } else {
+        }
+        else
+        {
             pressed = false;
         }
     }
 
     // differentiate between left/right and up/down
-    private static float Check(float compare) {
-        if (compare == 0f){
+    private static float Check(float compare)
+    {
+        if (compare == 0f)
+        {
             return 0f;
-        } else if (compare < 0f) {
+        }
+        else if (compare < 0f)
+        {
             return -1f;
-        } else {
+        }
+        else
+        {
             return 1f;
         }
     }
 
-    public void UndoLastMove() {
+    // Removes last move from the list and move the spaceship back one step
+    public void UndoLastMove()
+    {
         moveTracker.RemoveAt(moveCnt--);
         posX = moveTracker[moveCnt].x;
         posY = moveTracker[moveCnt].y;
 
         gameObject.transform.position = new Vector3(coordPosX[posY], coordPosY[posX], 0);
-    }
-
-    public void RestartLevel() {
-        moveCnt = 0;
-        (int x, int y) startingPos = moveTracker[0];
-        failed = success = instantFeedbackRestart = false;
-        moveTracker = new(){startingPos};
-
-        gameObject.transform.position = new Vector3(coordPosX[startingPos.y], coordPosY[startingPos.x], 0);
     }
 }

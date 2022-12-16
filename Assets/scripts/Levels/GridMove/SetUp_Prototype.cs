@@ -7,108 +7,115 @@ using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 public class SetUp_Prototype : MonoBehaviour
 {
+    private bool instantFeedback = Config.getInstantFeedback();
+    private bool ignore = false;
+    
+    private Colors c = new Colors();
+    public Image TaskDescription;
+    public PlayerMovement pm;
+    private int level;
+    
+    public List<Sprite> objectList = new List<Sprite>();
+    
     public Button quitButton;
     public Button confirmButton;
     public Button undoBUtton;
-    public List<Sprite> objectList = new List<Sprite>();
+    
     public GameObject circle;
-    private int level;
-    public GameObject levelText;
-    public Image TaskDescription;
-    public PlayerMovement pm;
-    private Colors c = new Colors();
-    private bool ignore = false;
-    private bool instantFeedback = Config.getInstantFeedback();
-    //private GatherData gd = new GatherData();
     public GameObject nextButton;
-    public GameObject winText;
     public GameObject retryButton;
+    
+    public GameObject levelText;
+    public GameObject winText;
     public GameObject lossText;
     public GameObject moveCounter;
 
     private List<GameObject> circleList = new List<GameObject>();
 
-    // use this matrix to define the game area
-    // -1 - death fields, dont touch
-    //  0 - not passable (no field)
-    //  1 - normal field
-    //  2 - teleporter to the other side (horizontal)
-    //  3 - teleporter to the other side (vertical)
-    // 69 - goal
     public int[,] gameArea;
-
-    // this matrix allows you to color the tiles
-    // numbers correspond to the index of the color in the color colors array in the colors class
     public int[,] gameAreaColors;
+    public List<(int x, int y, bool goal)> allowedMoves;
 
     // define the center points of the tiles and where the character moves to
     private float[] coordPosX = new float[5] { -0.5f, 1.25f, 3f, 4.75f, 6.5f };
     private float[] coordPosY = new float[5] { 3.5f, 1.75f, 0f, -1.75f, -3.5f };
 
-    // define path the user has to take
-    // coordinates based on the matrix
-    public List<(int x, int y, bool goal)> allowedMoves;
 
     // Start is called before the first frame update
-    void Start() {
+    void Start()
+    {
         LevelLoader();
         quitButton.onClick.AddListener(() => quit());
 
         GatherData.startLevel();
     }
 
-    // Update is called once per frame
-    // checks if the fail/success variables have been set
-    void Update() {
+    // Checks if the level has been completed or the player has failed
+    void Update()
+    {
         moveCounter.GetComponent<TMPro.TextMeshProUGUI>().text = "Moves left: " + (15 - pm.moveCnt).ToString();
-        if (pm.success && !ignore) {
-            //Debug.Log("you won!");
+        if (pm.success && !ignore)
+        { 
             Camewa.Blur(true);
             nextButton.SetActive(true);
             winText.SetActive(true);
             ignore = true;
-        } else if (!ignore && (pm.failed || (!instantFeedback && pm.moveCnt >= 15))) {
-            //Debug.Log("ah shit you dead noob");
+        }
+        else if (!ignore && (pm.failed || (!instantFeedback && pm.moveCnt >= 15)))
+        {
             Camewa.Blur(true);
             retryButton.SetActive(true);
             lossText.SetActive(true);
             pm.failed = true;
             ignore = true;
-        } else if (pm.instantFeedbackRestart) {
+        }
+        else if (pm.instantFeedbackRestart)
+        {
             LevelLoader();
         }
 
-        if (Input.GetKeyDown(KeyCode.Return)) {
-            if (nextButton.activeSelf == true) {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (nextButton.activeSelf == true)
+            {
                 nextLevel();
-            } else if (retryButton.activeSelf == true) {
+            }
+            else if (retryButton.activeSelf == true)
+            {
                 retryLevel();
             }
         }
     }
 
-    // adds circles, scales them and assignes them a color
-    private void AddCircle(int x, int y) {
+    // Add, scale and color circles
+    private void AddCircle(int x, int y)
+    {
         Vector3 circlePos = new Vector3(coordPosX[y], coordPosY[x], 0);
         circle.GetComponent<SpriteRenderer>().sprite = objectList[0];
         GameObject gObj = Instantiate(circle, circlePos, Quaternion.identity) as GameObject;
         circleList.Add(gObj);
         Transform t = gObj.transform;
         t.localScale = new Vector3(0.55f, 0.55f, 0.55f);
-        
+
         gObj.GetComponent<SpriteRenderer>().material.color = c.colors[gameAreaColors[x, y]];
     }
 
-    private void buttonClickSubmit() {
+    // Button to submit ones solution
+    // verifies that the performed moves match the correct ones
+    private void buttonClickSubmit()
+    {
         GatherData.addSubmit();
-        
-        if (pm.moveTracker.Count != allowedMoves.Count) {
+
+        if (pm.moveTracker.Count != allowedMoves.Count)
+        {
             pm.failed = true;
             return;
         }
 
-        for (int i = 0; i < pm.moveTracker.Count; i++) {
-            if (allowedMoves[i].x != pm.moveTracker[i].x || allowedMoves[i].y != pm.moveTracker[i].y) {
+        for (int i = 0; i < pm.moveTracker.Count; i++)
+        {
+            if (allowedMoves[i].x != pm.moveTracker[i].x || allowedMoves[i].y != pm.moveTracker[i].y)
+            {
                 pm.failed = true;
                 return;
             }
@@ -117,16 +124,22 @@ public class SetUp_Prototype : MonoBehaviour
         pm.success = true;
     }
 
-    private void buttonClickUndo() {
+    // Button to go back one move
+    private void buttonClickUndo()
+    {
         GatherData.addUndo();
-        if (pm.moveCnt > 0) {
+        if (pm.moveCnt > 0)
+        {
             // comment
             pm.UndoLastMove();
         }
     }
 
-    public void LevelLoader() {
-        foreach (GameObject g in circleList) {
+    // Loads the level data from the config and sets up the level
+    public void LevelLoader()
+    {
+        foreach (GameObject g in circleList)
+        {
             Destroy(g);
         }
 
@@ -145,21 +158,25 @@ public class SetUp_Prototype : MonoBehaviour
 
         pm.InitializeSpaceship();
 
-        for (int x = 0; x < 5; x++) {
-            for (int y = 0; y < 5; y++) {
-                if (gameArea[x, y] != 0) {
+        for (int x = 0; x < 5; x++)
+        {
+            for (int y = 0; y < 5; y++)
+            {
+                if (gameArea[x, y] != 0)
+                {
                     AddCircle(x, y);
                 }
             }
         }
         quitButton.onClick.AddListener(() => quit());
 
-        if (!instantFeedback) {
-            //moveCounter.SetActive(true);
+        if (!instantFeedback && Config.getLevelNr() == 1)
+        {
             confirmButton.onClick.AddListener(() => buttonClickSubmit());
             undoBUtton.onClick.AddListener(() => buttonClickUndo());
-        } else if (instantFeedback && Config.getLevelNr() == 1 && !pm.instantFeedbackRestart) {
-            //moveCounter.SetActive(false);
+        }
+        else if (instantFeedback && Config.getLevelNr() == 1 && !pm.instantFeedbackRestart)
+        {
             Destroy(confirmButton.gameObject);
             Destroy(undoBUtton.gameObject);
         }
@@ -168,33 +185,41 @@ public class SetUp_Prototype : MonoBehaviour
 
         levelText.GetComponent<TMPro.TextMeshProUGUI>().text = "Level " + level.ToString();
         TaskDescription.sprite = Resources.Load<Sprite>("Sprites/Level" + level.ToString());
-
     }
 
-    public void nextLevel(){
+    // Function for the next level button, writes data to log and initiates load of the next level
+    public void nextLevel()
+    {
         GatherData.stopLevel("Level " + level.ToString());
         Config.incrementLevelNr();
-        
-        if (Config.getWasFinalLevel()) {
+
+        if (Config.getWasFinalLevel())
+        {
             GatherData.writeLogToFile();
-            
+
             SceneManager.LoadScene("MainMenu");
-        } else {
+        }
+        else
+        {
             LevelLoader();
         }
         GatherData.startLevel();
     }
 
-    public void retryLevel(){
+    // Function for the retry level button, restarts the level and increments error counter
+    public void retryLevel()
+    {
         GatherData.addFailure();
         LevelLoader();
     }
 
-    public void quit(){
+    // Function for the quit button, writes data to log file and returns to the variant menu
+    public void quit()
+    {
         GatherData.stopLevel("Level " + level.ToString());
         Config.incrementLevelNr();
         GatherData.writeLogToFile();
-            
+
         SceneManager.LoadScene("MainMenu");
     }
 }

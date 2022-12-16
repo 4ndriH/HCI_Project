@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Colors {
+public class Colors
+{
     public Color[] colors = new Color[] {
         new Color(0.604f, 0.604f, 0.71f, 0.8f), // default
         new Color(0.988f, 0.929f, 0.267f, 0.8f), // yellow
